@@ -32,10 +32,23 @@ open System.Threading
 open Suave.Successful
 
 //Compose & start the web server!
-let main =
+let app =
+
+    // Compose & start the web server!
+    let part =
+      let root = IO.Path.Combine(__SOURCE_DIRECTORY__, "web")
+      choose 
+        [ 
+//          path "/maptweets" >=> handShake (socketOfObservable mapTweets)
+//          path "/feedtweets" >=> handShake (socketOfObservable feedTweets)
+//          path "/frequencies" >=> handShake (socketOfObservable phraseUpdates)
+//          path "/zones" >=> Successful.OK timeZonesJson
+          path "/" >=> Files.browseFile root "index.html" 
+          Files.browse root ]
+
     let cts = new CancellationTokenSource()
     let conf = { defaultConfig with cancellationToken = cts.Token }
-    let listening, server = startWebServerAsync conf (OK "Hello World")
+    let listening, server = startWebServerAsync conf part
     Async.Start(server, cts.Token)
     printfn "Make requests now"
     Console.ReadKey true |> ignore
