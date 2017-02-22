@@ -1,11 +1,10 @@
-﻿#r "packages/Suave/lib/net40/Suave.dll"
+﻿#r @"packages/Suave/lib/net40/Suave.dll"
+#r @"packages/FAKE/tools/FakeLib.dll"
 
 open System
 open System.IO
 
-Environment.CurrentDirectory <- __SOURCE_DIRECTORY__
-
-open System
+open Fake
 open System.Web
 open System.Text
 open System.Collections.Generic
@@ -31,25 +30,27 @@ open Suave.Utils
 open System.Threading
 open Suave.Successful
 
-//Compose & start the web server!
+
+
+Environment.CurrentDirectory <- __SOURCE_DIRECTORY__
+ 
 let app =
+  let root = IO.Path.Combine(__SOURCE_DIRECTORY__, "web")
+  choose
+        [ GET >=> choose
+            [ path "/" >=> Files.browseFile root "index.html"
+              path "/goodbye" >=> OK "Good bye GET" ]
+        ]  
 
-    // Compose & start the web server!
-    let part =
-      let root = IO.Path.Combine(__SOURCE_DIRECTORY__, "web")
-      choose 
-        [ 
-//          path "/maptweets" >=> handShake (socketOfObservable mapTweets)
-//          path "/feedtweets" >=> handShake (socketOfObservable feedTweets)
-//          path "/frequencies" >=> handShake (socketOfObservable phraseUpdates)
-//          path "/zones" >=> Successful.OK timeZonesJson
-          path "/" >=> Files.browseFile root "index.html" 
-          Files.browse root ]
+//Compose & start the web server!
 
-    let cts = new CancellationTokenSource()
-    let conf = { defaultConfig with cancellationToken = cts.Token }
-    let listening, server = startWebServerAsync conf part
-    Async.Start(server, cts.Token)
-    printfn "Make requests now"
-    Console.ReadKey true |> ignore
-    cts.Cancel()
+Target "run" (fun _ ->
+                let cts = new CancellationTokenSource()
+                let conf = { defaultConfig with cancellationToken = cts.Token }
+                let listening, server = startWebServerAsync conf app
+                Async.Start(server, cts.Token)
+                printfn "Make requests now"
+                Console.ReadKey true |> ignore
+                cts.Cancel())
+
+RunTargetOrDefault "run"
