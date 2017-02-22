@@ -10,9 +10,9 @@ open System.Runtime.InteropServices
 [<assembly: AssemblyTitle("TweetWorldBank")>]
 [<assembly: AssemblyDescription("")>]
 [<assembly: AssemblyConfiguration("")>]
-[<assembly: AssemblyCompany("Hewlett-Packard")>]
+[<assembly: AssemblyCompany("")>]
 [<assembly: AssemblyProduct("TweetWorldBank")>]
-[<assembly: AssemblyCopyright("Copyright © Hewlett-Packard 2017")>]
+[<assembly: AssemblyCopyright("")>]
 [<assembly: AssemblyTrademark("")>]
 [<assembly: AssemblyCulture("")>]
 
@@ -33,8 +33,7 @@ open System.Runtime.InteropServices
 // 
 // È possibile specificare tutti i valori oppure impostare valori predefiniti per i numeri relativi alla revisione e alla build 
 // utilizzando l'asterisco (*) come illustrato di seguito:
-// [<assembly: AssemblyVersion("1.0.*")>]
-[<assembly: AssemblyVersion("1.0.0.0")>]
+[<assembly: AssemblyVersion("1.0.*")>]
 [<assembly: AssemblyFileVersion("1.0.0.0")>]
 
 do
